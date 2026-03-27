@@ -1,0 +1,142 @@
+/**
+ * Optivra - Google Apps Script for Form Submissions
+ * Handles: contact forms, product inquiries, callback requests, quote requests
+ * Each form type saves to its OWN sheet tab.
+ *
+ * SETUP:
+ * 1. Create a new Google Sheet
+ * 2. Extensions > Apps Script > paste this code
+ * 3. Deploy as Web App (Execute as: Me, Access: Anyone)
+ * 4. Copy the URL into main.js FORM_ENDPOINT
+ */
+
+const CONFIG = {
+  recipientEmail: 'hello@optivra.in',
+};
+
+// ─── SHEET DEFINITIONS ────────────────────────────────────────────────────────
+const SHEETS = {
+  contact: {
+    name: 'Contact Form',
+    headers: ['Timestamp', 'Name', 'Email', 'Company', 'Message', 'Status']
+  },
+  product_inquiry: {
+    name: 'Product Inquiries',
+    headers: ['Timestamp', 'Product', 'Name', 'Email', 'Phone', 'Budget', 'Status']
+  },
+  quote_request: {
+    name: 'Quote Requests',
+    headers: ['Timestamp', 'Name', 'Email', 'Phone', 'Company', 'Service', 'Budget', 'Timeline', 'Message', 'Status']
+  },
+  callback_request: {
+    name: 'Callback Requests',
+    headers: ['Timestamp', 'Name', 'Email', 'Phone', 'Company', 'Interest', 'Preferred Time', 'Message', 'Status']
+  }
+};
+
+// ─── MAIN HANDLER ─────────────────────────────────────────────────────────────
+function doPost(e) {
+  try {
+    const data = JSON.parse(e.postData.contents);
+    const type = data.type || 'contact';
+
+    switch (type) {
+      case 'contact_form':   handleContactForm(data);    break;
+      case 'product_inquiry': handleProductInquiry(data); break;
+      case 'quote_request':  handleQuoteRequest(data);   break;
+      case 'callback_request': handleCallbackRequest(data); break;
+      default:               handleContactForm(data);    break;
+    }
+
+    return ContentService
+      .createTextOutput(JSON.stringify({ status: 'success', message: 'Received!' }))
+      .setMimeType(ContentService.MimeType.JSON);
+
+  } catch (err) {
+    Logger.log('Error: ' + err.toString());
+    return ContentService
+      .createTextOutput(JSON.stringify({ status: 'error', message: err.toString() }))
+      .setMimeType(ContentService.MimeType.JSON);
+  }
+}
+
+// ─── HELPERS ──────────────────────────────────────────────────────────────────
+function getSheet(type) {
+  const def = SHEETS[type];
+  const ss  = SpreadsheetApp.getActiveSpreadsheet();
+  let sheet = ss.getSheetByName(def.name);
+  if (!sheet) {
+    sheet = ss.insertSheet(def.name);
+    const header = sheet.getRange(1, 1, 1, def.headers.length);
+    sheet.appendRow(def.headers);
+    header.setFontWeight('bold');
+    header.setBackground('#1A1A1A');
+    header.setFontColor('#C8A165');
+    sheet.setFrozenRows(1);
+  }
+  return sheet;
+}
+
+function now() {
+  return new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' }) + ' IST';
+}
+
+function sendEmail(subject, body) {
+  MailApp.sendEmail({ to: CONFIG.recipientEmail, subject, body });
+}
+
+// ─── CONTACT FORM ─────────────────────────────────────────────────────────────
+function handleContactForm(d) {
+  getSheet('contact').appendRow([
+    now(), d.name||'', d.email||'', d.company||'', d.message||'', 'New'
+  ]);
+  sendEmail(
+    `✉️ Contact Form — ${d.name}`,
+    `Name: ${d.name}\nEmail: ${d.email}\nCompany: ${d.company||'—'}\n\nMessage:\n${d.message}\n\n${now()}`
+  );
+}
+
+// ─── PRODUCT INQUIRY ──────────────────────────────────────────────────────────
+function handleProductInquiry(d) {
+  getSheet('product_inquiry').appendRow([
+    now(), d.product||'', d.name||'', d.email||'', d.phone||'', d.budget||'', 'New'
+  ]);
+  sendEmail(
+    `🛒 Product Inquiry — ${d.name} (${d.product})`,
+    `Product: ${d.product||'—'}\nName: ${d.name}\nEmail: ${d.email}\nPhone: ${d.phone||'—'}\nBudget: ${d.budget||'—'}\n\n${now()}`
+  );
+}
+
+// ─── QUOTE REQUEST ────────────────────────────────────────────────────────────
+function handleQuoteRequest(d) {
+  getSheet('quote_request').appendRow([
+    now(), d.name||'', d.email||'', d.phone||'', d.company||'',
+    d.service||'', d.budget||'', d.timeline||'', d.message||'', 'New'
+  ]);
+  sendEmail(
+    `🎯 Quote Request — ${d.name} (${d.service})`,
+    `Name: ${d.name}\nEmail: ${d.email}\nPhone: ${d.phone||'—'}\nCompany: ${d.company||'—'}\nService: ${d.service}\nBudget: ${d.budget}\nTimeline: ${d.timeline}\n\nMessage:\n${d.message||'—'}\n\n${now()}`
+  );
+}
+
+// ─── CALLBACK REQUEST ─────────────────────────────────────────────────────────
+function handleCallbackRequest(d) {
+  getSheet('callback_request').appendRow([
+    now(), d.name||'', d.email||'', d.phone||'', d.company||'',
+    d.interest||'General', d.preferredTime||'Anytime', d.message||'', 'New'
+  ]);
+  sendEmail(
+    `📞 Callback Request — ${d.name}`,
+    `Name: ${d.name}\nEmail: ${d.email}\nPhone: ${d.phone}\nCompany: ${d.company||'—'}\nInterest: ${d.interest||'General'}\nPreferred Time: ${d.preferredTime||'Anytime'}\n\n${now()}`
+  );
+}
+
+// ─── TEST ─────────────────────────────────────────────────────────────────────
+function testProductInquiry() {
+  doPost({ postData: { contents: JSON.stringify({
+    type: 'product_inquiry',
+    product: 'AI Analytics Platform',
+    name: 'Test User', email: 'test@example.com',
+    phone: '+91 9876543210', budget: '₹2-5L'
+  })}});
+}

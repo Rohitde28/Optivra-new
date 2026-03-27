@@ -44,13 +44,50 @@ document.querySelectorAll('.nav-links a').forEach(link => {
     });
 });
 
-// ========== NAVBAR SCROLL EFFECT ==========
+// ========== NAVBAR HIDE ON SCROLL DOWN / SHOW ON SCROLL UP ==========
+const scrollTopBtn = document.getElementById('scrollTop');
+const marqueeEl   = document.getElementById('topMarquee');
+const siteHeader  = document.querySelector('.site-header');
+
+let lastScrollY = 0;
+let ticking = false;
+
 window.addEventListener('scroll', () => {
-    const nav = document.getElementById('nav');
-    if (window.scrollY > 100) {
-        nav.classList.add('scrolled');
-    } else {
-        nav.classList.remove('scrolled');
+    if (!ticking) {
+        window.requestAnimationFrame(() => {
+            const scrollY = window.scrollY;
+            const nav = document.getElementById('nav');
+
+            // Nav glass effect
+            if (scrollY > 60) nav.classList.add('scrolled');
+            else nav.classList.remove('scrolled');
+
+            // Hide marquee after 60px
+            if (marqueeEl) {
+                marqueeEl.classList.toggle('hidden', scrollY > 60);
+            }
+
+            // Hide header on scroll down, show on scroll up
+            if (siteHeader) {
+                if (scrollY > lastScrollY && scrollY > 120) {
+                    // Scrolling DOWN — hide
+                    siteHeader.style.transform = 'translateY(-100%)';
+                    siteHeader.style.transition = 'transform 0.35s ease';
+                } else {
+                    // Scrolling UP — show
+                    siteHeader.style.transform = 'translateY(0)';
+                }
+            }
+
+            // Scroll-to-top FAB
+            if (scrollTopBtn) {
+                scrollTopBtn.classList.toggle('visible', scrollY > 400);
+            }
+
+            lastScrollY = scrollY;
+            ticking = false;
+        });
+        ticking = true;
     }
 });
 
@@ -90,28 +127,51 @@ window.addEventListener('scroll', () => {
     });
 });
 
-// ========== REVEAL ANIMATIONS ==========
+// ========== REVEAL ANIMATIONS (fires ONCE per element) ==========
 function reveal() {
-    const reveals = document.querySelectorAll('.reveal');
-    
-    reveals.forEach(element => {
-        const windowHeight = window.innerHeight;
+    document.querySelectorAll('.reveal:not(.active)').forEach(element => {
         const revealTop = element.getBoundingClientRect().top;
-        const revealPoint = 150;
-        
-        if (revealTop < windowHeight - revealPoint) {
-            element.classList.add('active');
-            
+        if (revealTop < window.innerHeight - 120) {
             const delay = element.dataset.delay;
-            if (delay) {
-                element.style.transitionDelay = `${delay}s`;
-            }
+            if (delay) element.style.transitionDelay = `${delay}s`;
+            element.classList.add('active');
         }
     });
 }
 
-window.addEventListener('scroll', reveal);
-reveal();
+window.addEventListener('scroll', reveal, { passive: true });
+reveal(); // run once on load
+
+// ========== STATS COUNTER ANIMATION ==========
+function animateCounter(el, target, duration) {
+    let start = 0;
+    const step = target / (duration / 16);
+    const timer = setInterval(() => {
+        start += step;
+        if (start >= target) {
+            el.textContent = target;
+            clearInterval(timer);
+        } else {
+            el.textContent = Math.floor(start);
+        }
+    }, 16);
+}
+
+const statsObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) {
+            entry.target.querySelectorAll('.stat-num').forEach(num => {
+                const target = parseInt(num.dataset.target, 10);
+                animateCounter(num, target, Math.min(1800, target * 8));
+            });
+            statsObserver.unobserve(entry.target);
+        }
+    });
+}, { threshold: 0.3 });
+
+const statsSection = document.querySelector('.stats-section');
+if (statsSection) statsObserver.observe(statsSection);
+
 
 // ========== HERO CANVAS ANIMATION ==========
 const canvas = document.getElementById('heroCanvas');
@@ -265,4 +325,160 @@ function showFormMessage(form, message, type) {
     }, 5000);
 }
 
+// ========== CAREERS MODAL ==========
+const careersOverlay = document.getElementById('careersModalOverlay');
+
+function openCareersModal() {
+    if (careersOverlay) {
+        careersOverlay.classList.add('active');
+        document.body.style.overflow = 'hidden';
+    }
+}
+
+function closeCareersModal() {
+    if (careersOverlay) {
+        careersOverlay.classList.remove('active');
+        document.body.style.overflow = '';
+    }
+}
+
+if (careersOverlay) {
+    careersOverlay.addEventListener('click', (e) => {
+        if (e.target === careersOverlay) closeCareersModal();
+    });
+}
+
+// ========== MARQUEE SCROLL BEHAVIOR ==========
+
+const topMarquee = document.getElementById('topMarquee');
+if (topMarquee) {
+    let lastScrollY = 0;
+    window.addEventListener('scroll', () => {
+        if (window.scrollY > 100) {
+            topMarquee.style.transform = 'translateY(-100%)';
+            topMarquee.style.transition = 'transform 0.3s';
+        } else {
+            topMarquee.style.transform = 'translateY(0)';
+        }
+        lastScrollY = window.scrollY;
+    });
+}
+
+// ========== SHOWCASE MODAL ==========
+const showcaseProducts = [
+    {
+        title: 'AI Analytics Platform',
+        badge: 'AI Powered',
+        image: 'https://images.unsplash.com/photo-1677442136019-21780ecad995?w=800&h=600&fit=crop',
+        description: 'Our AI Analytics Platform leverages cutting-edge machine learning algorithms to provide real-time business intelligence. Transform raw data into actionable insights with predictive analytics, anomaly detection, and automated reporting. Built for enterprise-scale data processing with intuitive dashboards.',
+        features: ['Machine Learning', 'Real-time Analytics', 'Predictive Insights', 'Auto Reports', 'Custom Dashboards', 'API Integration']
+    },
+    {
+        title: 'Smart Automation Suite',
+        badge: 'Automation',
+        image: 'https://images.unsplash.com/photo-1555949963-aa79dcee981c?w=800&h=600&fit=crop',
+        description: 'End-to-end workflow automation that reduces manual tasks by 80%. Our Smart Automation Suite integrates with your existing tools to streamline operations, automate repetitive processes, and free your team to focus on high-value work. From document processing to customer service automation.',
+        features: ['Workflow Builder', 'RPA Integration', 'Document AI', 'Chatbot Engine', 'Process Mining', 'Scalable Cloud']
+    },
+    {
+        title: 'Data Visualization Engine',
+        badge: 'Data Science',
+        image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&h=600&fit=crop',
+        description: 'Transform complex datasets into stunning, interactive visual dashboards. Our Data Visualization Engine supports real-time data streaming, multi-source integration, and collaborative analysis. Create publication-ready charts and share insights across your organization instantly.',
+        features: ['Interactive Charts', 'Real-time Streaming', 'Multi-source Data', 'Collaboration', 'Export & Share', 'Custom Themes']
+    }
+];
+
+const modalOverlay = document.getElementById('showcaseModalOverlay');
+const modalClose = document.getElementById('showcaseModalClose');
+
+function openShowcaseModal(index) {
+    const product = showcaseProducts[index];
+    if (!product || !modalOverlay) return;
+
+    document.getElementById('modalImage').src = product.image;
+    document.getElementById('modalImage').alt = product.title;
+    document.getElementById('modalBadge').textContent = product.badge;
+    document.getElementById('modalTitle').textContent = product.title;
+    document.getElementById('modalDescription').textContent = product.description;
+    
+    const featuresEl = document.getElementById('modalFeatures');
+    featuresEl.innerHTML = product.features.map(f => `<span>${f}</span>`).join('');
+
+    modalOverlay.classList.add('active');
+    document.body.style.overflow = 'hidden';
+}
+
+function closeShowcaseModal() {
+    if (!modalOverlay) return;
+    modalOverlay.classList.remove('active');
+    document.body.style.overflow = '';
+}
+
+if (modalClose) {
+    modalClose.addEventListener('click', closeShowcaseModal);
+}
+
+if (modalOverlay) {
+    modalOverlay.addEventListener('click', (e) => {
+        if (e.target === modalOverlay) {
+            closeShowcaseModal();
+        }
+    });
+}
+
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+        closeShowcaseModal();
+        closeCareersModal();
+    }
+});
+
+// ========== SHOWCASE FORM SUBMISSION ==========
+const showcaseForm = document.getElementById('showcaseForm');
+if (showcaseForm) {
+    showcaseForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        
+        const submitBtn = showcaseForm.querySelector('.submit-btn');
+        const originalText = submitBtn.textContent;
+        
+        const formData = {
+            type: 'product_inquiry',
+            product: document.getElementById('modalTitle')?.textContent || '',
+            name: showcaseForm.querySelector('[name="modalName"]').value,
+            email: showcaseForm.querySelector('[name="modalEmail"]').value,
+            phone: showcaseForm.querySelector('[name="modalPhone"]').value,
+            budget: showcaseForm.querySelector('[name="modalBudget"]').value
+        };
+        
+        if (!validateEmail(formData.email)) {
+            showFormMessage(showcaseForm, 'Please enter a valid email address', 'error');
+            return;
+        }
+        
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Sending...';
+        
+        try {
+            await fetch(FORM_ENDPOINT, {
+                method: 'POST',
+                mode: 'no-cors',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(formData)
+            });
+            
+            showFormMessage(showcaseForm, 'Thank you for your interest! We\'ll reach out to you soon.', 'success');
+            showcaseForm.reset();
+        } catch (error) {
+            console.error('Error:', error);
+            showFormMessage(showcaseForm, 'Something went wrong. Please email us at hello@optivra.in', 'error');
+        } finally {
+            submitBtn.disabled = false;
+            submitBtn.textContent = originalText;
+        }
+    });
+}
+
 // Made with Bob
+

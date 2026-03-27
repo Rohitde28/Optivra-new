@@ -38,9 +38,6 @@
 </head>
 <body>
     <!-- Loader -->
-</head>
-<body>
-    <!-- Loader -->
     <div class="loader" id="loader">
         <div class="loader-text">
             OPTIVRA<span class="loader-dot">.</span>
@@ -52,21 +49,41 @@
     <div class="cursor-follower" id="cursor-follower"></div>
 
     <!-- Navigation -->
-    <nav id="nav">
-        <a href="#" class="logo">OPTIVRA<span>.</span></a>
-        <div class="mobile-menu-btn" id="mobileMenuBtn">
-            <i class="fas fa-bars"></i>
+    <div class="site-header">
+        <!-- AI Academy Marquee -->
+        <div class="top-marquee" id="topMarquee">
+            <div class="marquee-track">
+                <span class="marquee-item"><i class="fas fa-graduation-cap"></i> AI Academy &mdash; Join Our Next Cohort</span>
+                <span class="marquee-divider">&#10022;</span>
+                <span class="marquee-item"><i class="fas fa-video"></i> Free Webinar: Future of AI &mdash; Register Now</span>
+                <span class="marquee-divider">&#10022;</span>
+                <span class="marquee-item"><i class="fas fa-rocket"></i> Optivra's Funded AI Product Room &mdash; Explore Now</span>
+                <span class="marquee-divider">&#10022;</span>
+                <span class="marquee-item"><i class="fas fa-graduation-cap"></i> AI Academy &mdash; Join Our Next Cohort</span>
+                <span class="marquee-divider">&#10022;</span>
+                <span class="marquee-item"><i class="fas fa-video"></i> Free Webinar: Future of AI &mdash; Register Now</span>
+                <span class="marquee-divider">&#10022;</span>
+                <span class="marquee-item"><i class="fas fa-rocket"></i> Optivra's Funded AI Product Room &mdash; Explore Now</span>
+                <span class="marquee-divider">&#10022;</span>
+            </div>
         </div>
-        <div class="nav-links" id="navLinks">
-            <a href="#home" class="active">Home</a>
-            <a href="#about">About</a>
-            <a href="#team">Team</a>
-            <a href="#services">Services</a>
-            <a href="#process">Process</a>
-            <a href="#faq">FAQ</a>
-            <a href="#contact" class="contact-btn">Contact</a>
-        </div>
-    </nav>
+        <nav id="nav">
+            <a href="#" class="logo">OPTIVRA<span>.</span></a>
+            <div class="mobile-menu-btn" id="mobileMenuBtn">
+                <i class="fas fa-bars"></i>
+            </div>
+            <div class="nav-links" id="navLinks">
+                <a href="#home" class="active">Home</a>
+                <a href="#about">About</a>
+                <a href="#team">Team</a>
+                <a href="#services">Services</a>
+                <a href="#showcase">Products</a>
+                <a href="#faq">FAQ</a>
+                <a href="https://workshop.optivra.in" target="_blank" class="academy-btn"><i class="fas fa-graduation-cap"></i> AI Academy</a>
+                <a href="#contact" class="contact-btn">Contact</a>
+            </div>
+        </nav>
+    </div>
 
     <!-- Hero Section -->
     <section id="home" class="hero">
@@ -85,20 +102,36 @@
                     <a href="#services" class="btn btn-primary">Explore Our Work</a>
                     <a href="#contact" class="btn btn-outline">Let's Talk</a>
                 </div>
-                <div class="hero-stats">
-                    <div class="stat-item">
-                        <div class="stat-number">10</div>
-                        <div class="stat-label">Years Experience</div>
-                    </div>
-                    <div class="stat-item">
-                        <div class="stat-number">200</div>
-                        <div class="stat-label">Projects Done</div>
-                    </div>
-                    <div class="stat-item">
-                        <div class="stat-number">50</div>
-                        <div class="stat-label">Happy Clients</div>
-                    </div>
                 </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========== STATS SECTION ========== -->
+    <section class="stats-section" id="stats">
+        <div class="stats-inner">
+            <div class="stat-block reveal reveal-bottom" data-delay="0">
+                <div class="stat-num" data-target="10">0</div>
+                <div class="stat-plus">+</div>
+                <div class="stat-lbl">Years of Experience</div>
+            </div>
+            <div class="stat-sep"></div>
+            <div class="stat-block reveal reveal-bottom" data-delay="0.1">
+                <div class="stat-num" data-target="200">0</div>
+                <div class="stat-plus">+</div>
+                <div class="stat-lbl">Projects Delivered</div>
+            </div>
+            <div class="stat-sep"></div>
+            <div class="stat-block reveal reveal-bottom" data-delay="0.2">
+                <div class="stat-num" data-target="50">0</div>
+                <div class="stat-plus">+</div>
+                <div class="stat-lbl">Happy Clients</div>
+            </div>
+            <div class="stat-sep"></div>
+            <div class="stat-block reveal reveal-bottom" data-delay="0.3">
+                <div class="stat-num" data-target="20">0</div>
+                <div class="stat-plus">+</div>
+                <div class="stat-lbl">Global Specialists</div>
             </div>
         </div>
     </section>
@@ -272,7 +305,7 @@
 
             <div class="team-cta reveal reveal-top">
                 <p><span class="highlight">20+ remote specialists</span> across India, Europe & USA — AI/ML engineers, data scientists, full-stack developers, and cloud architects.</p>
-                <a href="#contact" class="btn btn-primary">Join Our Global Team</a>
+                <button onclick="openCareersModal()" class="btn btn-primary">Join Our Global Team</button>
             </div>
         </div>
     </section>
@@ -516,6 +549,167 @@
         </div>
     </section>
 
+    <!-- ========== CAREERS MODAL ========== -->
+    <div class="showcase-modal-overlay" id="careersModalOverlay">
+        <div class="showcase-modal careers-modal">
+            <button class="showcase-modal-close" onclick="closeCareersModal()" aria-label="Close">&times;</button>
+            <div class="careers-modal-body">
+                <div class="careers-modal-left">
+                    <div class="careers-icon"><i class="fas fa-rocket"></i></div>
+                    <h2>Work With <span class="highlight">Optivra</span></h2>
+                    <p>Join a team of brilliant minds shaping the future with AI, data, and technology. We work remotely, move fast, and build things that matter.</p>
+                    <div class="careers-perks">
+                        <div class="career-perk"><i class="fas fa-globe"></i><span>100% Remote</span></div>
+                        <div class="career-perk"><i class="fas fa-brain"></i><span>AI-First Culture</span></div>
+                        <div class="career-perk"><i class="fas fa-chart-line"></i><span>Fast Growth</span></div>
+                        <div class="career-perk"><i class="fas fa-users"></i><span>Global Team</span></div>
+                    </div>
+                </div>
+                <div class="careers-modal-right">
+                    <h3>How to Apply</h3>
+                    <p class="careers-sub">We&rsquo;re always looking for talented people. Reach out directly and let&rsquo;s chat.</p>
+                    <div class="careers-contact-options">
+                        <a href="mailto:hello@optivra.in?subject=Job Application - [Your Role]" class="careers-option email-option">
+                            <div class="careers-option-icon"><i class="fas fa-envelope"></i></div>
+                            <div>
+                                <h4>Email Your Resume</h4>
+                                <p>hello@optivra.in</p>
+                                <span>Subject: Job Application &mdash; [Your Role]</span>
+                            </div>
+                            <i class="fas fa-arrow-right careers-arrow"></i>
+                        </a>
+                        <a href="https://chat.whatsapp.com/CGNkkqEf9oa49k8y6OZvPU?mode=gi_t" target="_blank" class="careers-option whatsapp-option">
+                            <div class="careers-option-icon whatsapp-icon"><i class="fab fa-whatsapp"></i></div>
+                            <div>
+                                <h4>Join Our Community</h4>
+                                <p>WhatsApp Group</p>
+                                <span>Connect &amp; learn about openings</span>
+                            </div>
+                            <i class="fas fa-arrow-right careers-arrow"></i>
+                        </a>
+                    </div>
+                    <div class="careers-roles">
+                        <p class="careers-roles-title">Roles we often hire for:</p>
+                        <div class="careers-tags">
+                            <span>AI / ML Engineer</span>
+                            <span>Full-Stack Developer</span>
+                            <span>Data Scientist</span>
+                            <span>Cloud Engineer</span>
+                            <span>Product Manager</span>
+                            <span>Growth Marketing</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========== PRODUCT SHOWCASE SECTION ========== -->
+    <section class="showcase" id="showcase">
+        <div class="container">
+            <div class="section-header reveal reveal-top">
+                <div class="section-subtitle">Our Innovations</div>
+                <h2>Funded AI <span class="highlight">Product Room</span></h2>
+                <p class="section-description">Explore our internally funded AI products and projects. Click to learn more or express your interest.</p>
+            </div>
+            <div class="showcase-grid">
+                <!-- Product 1 -->
+                <div class="showcase-card reveal reveal-bottom" data-delay="0" onclick="openShowcaseModal(0)">
+                    <div class="showcase-media">
+                        <img src="https://images.unsplash.com/photo-1677442136019-21780ecad995?w=600&h=400&fit=crop" alt="AI Analytics Platform" loading="lazy">
+                        <div class="showcase-badge">AI Powered</div>
+                    </div>
+                    <div class="showcase-info">
+                        <h3>AI Analytics Platform</h3>
+                        <p>Intelligent business analytics powered by machine learning for real-time insights.</p>
+                        <span class="showcase-cta">Learn More <i class="fas fa-arrow-right"></i></span>
+                    </div>
+                </div>
+                <!-- Product 2 -->
+                <div class="showcase-card reveal reveal-bottom" data-delay="0.2" onclick="openShowcaseModal(1)">
+                    <div class="showcase-media">
+                        <img src="https://images.unsplash.com/photo-1555949963-aa79dcee981c?w=600&h=400&fit=crop" alt="Smart Automation Suite" loading="lazy">
+                        <div class="showcase-badge">Automation</div>
+                    </div>
+                    <div class="showcase-info">
+                        <h3>Smart Automation Suite</h3>
+                        <p>End-to-end workflow automation for enterprises. Reduce manual tasks by 80%.</p>
+                        <span class="showcase-cta">Learn More <i class="fas fa-arrow-right"></i></span>
+                    </div>
+                </div>
+                <!-- Product 3 -->
+                <div class="showcase-card reveal reveal-bottom" data-delay="0.4" onclick="openShowcaseModal(2)">
+                    <div class="showcase-media">
+                        <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=600&h=400&fit=crop" alt="Data Visualization Engine" loading="lazy">
+                        <div class="showcase-badge">Data Science</div>
+                    </div>
+                    <div class="showcase-info">
+                        <h3>Data Visualization Engine</h3>
+                        <p>Transform complex datasets into stunning, interactive visual dashboards.</p>
+                        <span class="showcase-cta">Learn More <i class="fas fa-arrow-right"></i></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========== SHOWCASE MODAL ========== -->
+    <div class="showcase-modal-overlay" id="showcaseModalOverlay">
+        <div class="showcase-modal">
+            <button class="showcase-modal-close" id="showcaseModalClose" aria-label="Close">&times;</button>
+            <div class="showcase-modal-body">
+                <div class="showcase-modal-media">
+                    <img id="modalImage" src="" alt="Product">
+                </div>
+                <div class="showcase-modal-content">
+                    <span class="showcase-modal-badge" id="modalBadge"></span>
+                    <h2 id="modalTitle"></h2>
+                    <p id="modalDescription" class="showcase-modal-desc"></p>
+                    <div class="showcase-modal-features" id="modalFeatures"></div>
+                    <div class="showcase-modal-divider"></div>
+                    <h4>Interested? Get in Touch</h4>
+                    <form id="showcaseForm" class="showcase-modal-form">
+                        <div class="modal-form-row">
+                            <input type="text" name="modalName" placeholder="Your Name" required>
+                            <input type="email" name="modalEmail" placeholder="Email Address" required>
+                        </div>
+                        <div class="modal-form-row">
+                            <input type="tel" name="modalPhone" placeholder="Phone Number" required>
+                            <input type="text" name="modalBudget" placeholder="Budget (e.g. &#8377;50K &mdash; &#8377;5L)">
+                        </div>
+                        <button type="submit" class="submit-btn">Submit Inquiry</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========== COMMUNITY SECTION ========== -->
+    <section class="community" id="community">
+        <div class="community-bg">
+            <div></div>
+            <div></div>
+        </div>
+        <div class="container">
+            <div class="community-content reveal reveal-bottom">
+                <div class="community-icon"><i class="fas fa-users"></i></div>
+                <h2>Join the Optivra <span class="highlight">Community</span></h2>
+                <p>Be part of a thriving community of innovators, developers, and AI enthusiasts. Get access to exclusive offers, learning resources, job opportunities, and event invitations.</p>
+                <div class="community-perks">
+                    <div class="perk-item"><i class="fas fa-book-open"></i><span>Learning Resources</span></div>
+                    <div class="perk-item"><i class="fas fa-briefcase"></i><span>Job Opportunities</span></div>
+                    <div class="perk-item"><i class="fas fa-calendar-alt"></i><span>Exclusive Events</span></div>
+                    <div class="perk-item"><i class="fas fa-tags"></i><span>Special Offers</span></div>
+                </div>
+                <div class="community-actions">
+                    <a href="https://chat.whatsapp.com/CGNkkqEf9oa49k8y6OZvPU?mode=gi_t" target="_blank" class="community-btn whatsapp-btn"><i class="fab fa-whatsapp"></i> Join WhatsApp</a>
+                    <a href="https://discord.gg/optivra" target="_blank" class="community-btn discord-btn"><i class="fab fa-discord"></i> Join Discord</a>
+                    <a href="https://www.instagram.com/opti.vra/?hl=en" target="_blank" class="community-btn insta-btn"><i class="fab fa-instagram"></i> Instagram</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <!-- Contact Section -->
     <section class="contact" id="contact">
         <div class="container">
@@ -583,9 +777,8 @@
                     </div>
                 </div>
                 <div class="social-links">
-                    <a href="https://www.linkedin.com/company/optivra-consulting/"><i class="fab fa-linkedin-in"></i></a>
-            
-                    <a href="https://www.instagram.com/opti.vra?igsh=MWVyYWw0NW42MXBibw=="><i class="fab fa-instagram"></i></a>
+                    <a href="https://www.linkedin.com/company/optivra-consulting/" target="_blank" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+                    <a href="https://www.instagram.com/opti.vra/?hl=en" target="_blank" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
                 </div>
             </div>
             <div class="footer-col">
@@ -615,6 +808,10 @@
                     <li>+91-7439071619</li>
                     <li>+91-6280179738</li>
                 </ul>
+                <div class="footer-careers">
+                    <h4>Careers</h4>
+                    <p>Interested in joining our team? Email us your resume at <a href="mailto:hello@optivra.in">hello@optivra.in</a></p>
+                </div>
             </div>
         </div>
         <div class="copyright">
@@ -624,5 +821,10 @@
 
     <!-- JavaScript -->
     <script src="assets/js/main.js"></script>
+
+    <button class="scroll-top" id="scrollTop" onclick="window.scrollTo({top:0,behavior:'smooth'})" aria-label="Back to top">
+        <i class="fas fa-chevron-up"></i>
+    </button>
+
 </body>
 </html>
